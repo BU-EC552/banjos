@@ -12,7 +12,8 @@ from celloapi2 import CelloResult, CelloQuery
 
 # obtain simulation data
 
-# perform optimization to obtain consistent circuit response
+# perform optimization to obtain consistent circuit response (eg minimize variance)
+# parameter perturbation will be performed to assess robutness of circuit (eg sensitivity analysis)
 
 # evaluate circuit with different metrics:
 # 1) CelloResult score?
