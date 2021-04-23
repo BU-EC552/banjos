@@ -1,5 +1,6 @@
 import json
 import csv
+import os
 
 ''' Function used to parse the input.json from celloapi2
     input: full path of input.json file'''
@@ -98,3 +99,13 @@ def GC_function(DNA_sequence):
 	print("The GC content is {}" .format(GC_content))
 
 	return GC_content
+
+
+# function to write modified input json file with noise
+def output_json(data, in_dir, new_file_name):
+    new_file = json.dumps(data, indent=4)
+    complete_name = os.path.join(in_dir, new_file_name)
+    f = open(complete_name, "w")
+    f.write(new_file)
+    f.close()
+
