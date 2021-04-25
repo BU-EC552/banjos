@@ -20,7 +20,6 @@ def parseInput(filename):
             key = str(data[idx]['name'])
             data_parse[key] = info
 
-
     ######## Example of data_parse output ########
     # 'LacI_sensor_model': 
     #     [{'name': 'ymax', 'value': 2.8, 'description': 'Maximal transcription'}, 
@@ -102,7 +101,23 @@ def GC_function(DNA_sequence):
 
 
 # function to write modified input json file with noise
-def output_json(data, in_dir, new_file_name):
+def output_json(prev_file, params, in_dir, new_file_name):
+    # prev_file: previous file which in this case is the input.json
+    # params: new parameters to be modified
+    # in_dir: input directory
+    # new_file_name: name of the new file to be created
+
+    full_prev_file = os.path.join(in_dir, prev_file)
+    data = None # Load entire prev_file
+    with open(full_prev_file) as f:
+        data = json.load(f)
+
+    # Add new parametes to data 
+    for i in range(len(data)):
+        if data[i]['collection'] == 'models':
+            data[i]['parameters'] = params[data[i]['name']]
+
+    # Save new data to the new file
     new_file = json.dumps(data, indent=4)
     complete_name = os.path.join(in_dir, new_file_name)
     f = open(complete_name, "w")

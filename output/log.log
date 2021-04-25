@@ -1,15 +1,15 @@
-2021-04-22 02:48:56.810 [main] INFO  LSRuntimeObject - Executing Stage: logicSynthesis
-2021-04-22 02:48:56.838 [main] INFO  LSRuntimeObject - Executing Algorithm: Yosys
-2021-04-22 02:48:57.562 [main] INFO  Yosys - +-----------------------------------------------------
-2021-04-22 02:48:57.564 [main] INFO  Yosys - |			    RESULTS
-2021-04-22 02:48:57.565 [main] INFO  Yosys - +-----------------------------------------------------
-2021-04-22 02:48:57.568 [main] INFO  Yosys - :               NOR cells:        1
-2021-04-22 02:48:57.569 [main] INFO  Yosys - :               NOT cells:        2
-2021-04-22 02:48:57.570 [main] INFO  Yosys - :        internal signals:        0
-2021-04-22 02:48:57.571 [main] INFO  Yosys - :           input signals:        2
-2021-04-22 02:48:57.573 [main] INFO  Yosys - :          output signals:        1
-2021-04-22 02:48:57.574 [main] INFO  Yosys - +-----------------------------------------------------
-2021-04-22 02:48:57.575 [main] INFO  Yosys - 
+2021-04-25 06:51:07.609 [main] INFO  LSRuntimeObject - Executing Stage: logicSynthesis
+2021-04-25 06:51:07.634 [main] INFO  LSRuntimeObject - Executing Algorithm: Yosys
+2021-04-25 06:51:07.870 [main] INFO  Yosys - +-----------------------------------------------------
+2021-04-25 06:51:07.872 [main] INFO  Yosys - |			    RESULTS
+2021-04-25 06:51:07.874 [main] INFO  Yosys - +-----------------------------------------------------
+2021-04-25 06:51:07.882 [main] INFO  Yosys - :               NOR cells:        1
+2021-04-25 06:51:07.883 [main] INFO  Yosys - :               NOT cells:        2
+2021-04-25 06:51:07.884 [main] INFO  Yosys - :        internal signals:        0
+2021-04-25 06:51:07.885 [main] INFO  Yosys - :           input signals:        2
+2021-04-25 06:51:07.886 [main] INFO  Yosys - :          output signals:        1
+2021-04-25 06:51:07.888 [main] INFO  Yosys - +-----------------------------------------------------
+2021-04-25 06:51:07.889 [main] INFO  Yosys - 
  /----------------------------------------------------------------------------\
  |                                                                            |
  |  yosys -- Yosys Open SYnthesis Suite                                       |
@@ -236,12 +236,12 @@ Exec: dot -Tpdf '/root/output/and_yosys.dot' > '/root/output/and_yosys.pdf.new' 
 14. Executing JSON backend.
 
 End of script. Logfile hash: a81cc2802a
-CPU: user 0.05s system 0.03s, MEM: 19.64 MB total, 10.13 MB resident
+CPU: user 0.02s system 0.01s, MEM: 19.64 MB total, 10.12 MB resident
 Yosys 0.9 (git sha1 1979e0b)
-Time spent: 57% 3x read_verilog (0 sec), 10% 1x abc (0 sec), ...
+Time spent: 55% 3x read_verilog (0 sec), 7% 4x opt_expr (0 sec), ...
 
-2021-04-22 02:48:57.585 [main] INFO  Yosys - 
-2021-04-22 02:49:00.244 [main] INFO  Main - 
+2021-04-25 06:51:07.907 [main] INFO  Yosys - 
+2021-04-25 06:51:09.915 [main] INFO  Main - 
 --------------------------------------------
 LogicSynthesisStats
 --------------------------------------------
@@ -261,9 +261,9 @@ Number of PRIMARY_OUTPUT gates: 1
 Number of NOT gates: 2
 Number of NOR gates: 1
 
-2021-04-22 02:49:00.259 [main] INFO  TMRuntimeObject - Executing Stage: technologyMapping
-2021-04-22 02:49:00.275 [main] INFO  TMRuntimeObject - Executing Algorithm: SimulatedAnnealing
-2021-04-22 02:49:00.294 [main] INFO  SimulatedAnnealing - 
+2021-04-25 06:51:09.924 [main] INFO  TMRuntimeObject - Executing Stage: technologyMapping
+2021-04-25 06:51:09.936 [main] INFO  TMRuntimeObject - Executing Algorithm: SimulatedAnnealing
+2021-04-25 06:51:09.963 [main] INFO  SimulatedAnnealing - 
 --------------------------------------------
 LSLogicEvaluation
 --------------------------------------------
@@ -275,46 +275,46 @@ $3             	true	false	true	false
 out            	false	false	false	true	
 --------------------------------------------
 
-2021-04-22 02:49:33.043 [main] INFO  SimulatedAnnealing - 
+2021-04-25 06:51:43.081 [main] INFO  SimulatedAnnealing - 
 --------------------------------------------
 TMToxicityEvaluation
 --------------------------------------------
-$1             	0.92	0.93	0.92	0.99	
-$2             	0.98	0.98	1.00	1.00	
-$3             	1.00	1.00	1.00	1.00	
+$1             	0.92	1.00	0.92	0.99	
+$2             	1.00	1.00	1.00	1.00	
+$3             	1.00	0.78	1.00	0.78	
 --------------------------------------------
-               	0.90	0.91	0.92	0.99	
+               	0.92	0.78	0.92	0.78	
 --------------------------------------------
 
-2021-04-22 02:49:33.060 [main] INFO  SimulatedAnnealing - 
+2021-04-25 06:51:43.091 [main] INFO  SimulatedAnnealing - 
 --------------------------------------------
 TMActivityEvaluation
 --------------------------------------------
-$1             	0.0070	0.0071	0.0071	1.3669	
-b              	0.0034	2.8000	0.0034	2.8000	
-$2             	3.9000	3.9000	0.0100	0.0100	
-a              	0.0013	0.0013	4.4000	4.4000	
-$3             	3.7706	0.0702	3.7706	0.0702	
-out            	0.0028	0.0028	0.0028	0.5468	
+$1             	0.0040	0.0040	0.0040	0.7529	
+b              	0.0019	5.1996	0.0019	5.1996	
+$2             	2.6865	2.6865	0.0102	0.0102	
+a              	0.0246	0.0246	0.3521	0.3521	
+$3             	3.7881	0.0638	3.7881	0.0638	
+out            	0.0016	0.0016	0.0016	0.3011	
 --------------------------------------------
 
-2021-04-22 02:49:33.064 [main] INFO  SimulatedAnnealing - Node: $1   	Type: NOR       	Gate: S4_SrpR   	
-2021-04-22 02:49:33.064 [main] INFO  SimulatedAnnealing - Node: out  	Type: PRIMARY_OUTPUT	Gate: YFP_reporter	
-2021-04-22 02:49:33.065 [main] INFO  SimulatedAnnealing - Node: $2   	Type: NOT       	Gate: P1_PhlF   	
-2021-04-22 02:49:33.067 [main] INFO  SimulatedAnnealing - Node: $3   	Type: NOT       	Gate: A1_AmtR   	
-2021-04-22 02:49:33.068 [main] INFO  SimulatedAnnealing - Node: b    	Type: PRIMARY_INPUT	Gate: LacI_sensor	
-2021-04-22 02:49:33.069 [main] INFO  SimulatedAnnealing - Node: a    	Type: PRIMARY_INPUT	Gate: TetR_sensor	
-2021-04-22 02:49:33.070 [main] INFO  SimulatedAnnealing - Score: 193.07
-2021-04-22 02:49:33.070 [main] INFO  SimulatedAnnealing - Generating plots
-2021-04-22 02:49:47.840 [main] INFO  PLRuntimeObject - Executing Stage: placing
-2021-04-22 02:49:47.854 [main] INFO  PLRuntimeObject - Executing Algorithm: Eugene
-2021-04-22 02:49:47.921 [main] INFO  Eugene - building Eugene input script
-2021-04-22 02:49:47.929 [main] INFO  Eugene - running Eugene
-2021-04-22 02:49:51.243 [main] INFO  Eugene - processing Eugene output
-2021-04-22 02:49:51.253 [main] INFO  Eugene - generating dnaplotlib figures
-2021-04-22 02:49:52.433 [main] INFO  EXRuntimeObject - Executing Stage: export
-2021-04-22 02:49:52.455 [main] INFO  EXRuntimeObject - Executing Algorithm: SBOL
-2021-04-22 02:49:52.929 [main] INFO  SBOL - creating SBOL document
-2021-04-22 02:49:53.122 [main] INFO  SBOL - grouping inserts
-2021-04-22 02:49:53.129 [main] INFO  SBOL - adding design modules
-2021-04-22 02:49:53.135 [main] INFO  SBOL - Writing SBOL document.
+2021-04-25 06:51:43.092 [main] INFO  SimulatedAnnealing - Node: $1   	Type: NOR       	Gate: S3_SrpR   	
+2021-04-25 06:51:43.094 [main] INFO  SimulatedAnnealing - Node: out  	Type: PRIMARY_OUTPUT	Gate: YFP_reporter	
+2021-04-25 06:51:43.095 [main] INFO  SimulatedAnnealing - Node: $2   	Type: NOT       	Gate: P1_PhlF   	
+2021-04-25 06:51:43.096 [main] INFO  SimulatedAnnealing - Node: $3   	Type: NOT       	Gate: A1_AmtR   	
+2021-04-25 06:51:43.096 [main] INFO  SimulatedAnnealing - Node: b    	Type: PRIMARY_INPUT	Gate: LacI_sensor	
+2021-04-25 06:51:43.097 [main] INFO  SimulatedAnnealing - Node: a    	Type: PRIMARY_INPUT	Gate: LuxR_sensor	
+2021-04-25 06:51:43.099 [main] INFO  SimulatedAnnealing - Score: 186.04
+2021-04-25 06:51:43.100 [main] INFO  SimulatedAnnealing - Generating plots
+2021-04-25 06:51:55.635 [main] INFO  PLRuntimeObject - Executing Stage: placing
+2021-04-25 06:51:55.651 [main] INFO  PLRuntimeObject - Executing Algorithm: Eugene
+2021-04-25 06:51:55.716 [main] INFO  Eugene - building Eugene input script
+2021-04-25 06:51:55.725 [main] INFO  Eugene - running Eugene
+2021-04-25 06:51:58.603 [main] INFO  Eugene - processing Eugene output
+2021-04-25 06:51:58.614 [main] INFO  Eugene - generating dnaplotlib figures
+2021-04-25 06:51:59.677 [main] INFO  EXRuntimeObject - Executing Stage: export
+2021-04-25 06:51:59.695 [main] INFO  EXRuntimeObject - Executing Algorithm: SBOL
+2021-04-25 06:52:00.190 [main] INFO  SBOL - creating SBOL document
+2021-04-25 06:52:00.352 [main] INFO  SBOL - grouping inserts
+2021-04-25 06:52:00.372 [main] INFO  SBOL - adding design modules
+2021-04-25 06:52:00.377 [main] INFO  SBOL - Writing SBOL document.

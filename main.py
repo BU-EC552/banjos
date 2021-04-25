@@ -86,8 +86,8 @@ print(f'Best input signals: {best_input_signals}')
 
 # perform optimization to obtain consistent circuit response (eg minimize variance)
 # extract parameters to optimize from UCF file
-ucf_parameters = parseInput(in_dir + '/' + in_ucf)
-num_parameters = len(ucf_parameters)
+# ucf_parameters = parseInput(in_dir + '/' + in_ucf)
+# num_parameters = len(ucf_parameters)
 
 
 # parameter perturbation will be performed to assess "robustness" of circuit (eg sensitivity analysis)
@@ -107,7 +107,7 @@ for i in range(signal_input):
                 # write modified value to new json file to submit to cello
                 new_file = 'noise.input.json'
                 # currently not properly exporting json (missing info that is not included in parseInput
-                output_json(input_parameters, in_dir, new_file)
+                output_json(input_sensor_file, input_parameters, in_dir, new_file)
                 print(f'Evaluating parameter" {n}')
                 # submit to cello to measure "robustness" - how score changes
                 m = CelloQuery(
