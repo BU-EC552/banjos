@@ -93,6 +93,8 @@ print(f'Best input signals: {best_input_signals}')
 # parameter perturbation will be performed to assess "robustness" of circuit (eg sensitivity analysis)
 rob_scores = []
 input_parameters = parseInput(in_dir + '/' + input_sensor_file)
+# copy of unpertubed input parameters to reset after each parameter is perturbed
+noiseless_param = parseInput(in_dir + '/' + input_sensor_file)
 signal_keys = list(input_parameters.keys())
 for i in range(signal_input):
     for j in range(len(signal_keys)):
@@ -105,8 +107,8 @@ for i in range(signal_input):
                 num = get_truncated_normal(mean=0.5, sd=1, low=0, upp=1)
                 input_parameters[best_input_signals[i] + '_sensor_model'][n]['value'] = input_parameters[best_input_signals[i] + '_sensor_model'][n]['value'] * (num.rvs(1))[0]
                 # write modified value to new json file to submit to cello
-                new_file = 'noise.input.json'
-                # currently not properly exporting json (missing info that is not included in parseInput
+                new_file = f'signal{i}_parameter{n}.input.json'
+                # exporting to json
                 output_json(input_sensor_file, input_parameters, in_dir, new_file)
                 print(f'Evaluating parameter: {n}')
                 # submit to cello to measure "robustness" - how score changes
@@ -125,19 +127,27 @@ for i in range(signal_input):
                 m.get_results()
                 res = CelloResult(results_dir=out_dir)
                 rob_scores.append(res.circuit_score)
-
+                # reset value
+                input_parameters[best_input_signals[i] + '_sensor_model'][n]['value'] =  noiseless_param[best_input_signals[i] + '_sensor_model'][n]['value']
 # analysis of scores --> order: (ymax, ymin, alpha, beta) --> for each signal
 delta_scores = []
 for i in range(len(rob_scores)):
     delta_scores.append(rob_scores[i] - best_score)
-# plot sensitiviy analysis
+# figure 1 = plot delta
 plt.plot(delta_scores)
 plt.ylabel("Delta Values: How scores changed with noise")
 plt.xlabel("Parameters")
 plt.title("Input Signals - Sensitivity Analysis")
 plt.show()
-# do more analysis
-print(delta_scores)
+# figure 2 plot scores vs original scores and add "error" bars
+original_score = []
+for i in range(len(rob_scores)):
+    original_score.append(best_score)
+plt.plot(original_score, 'g', rob_scores, 'r')
+plt.xlabel("Parameters")
+plt.ylabel("Scores")
+plt.show()
+
 # evaluate circuit with different metrics:
 # 1) CelloResult score?
 # 2) Cello toxicity?
