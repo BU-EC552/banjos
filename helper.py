@@ -1,9 +1,12 @@
 import json
 import csv
 import os
+from scipy.stats import truncnorm
 
 ''' Function used to parse the input.json from celloapi2
     input: full path of input.json file'''
+
+
 def parseInput(filename):
     data = None
     with open(filename) as f:
@@ -21,23 +24,27 @@ def parseInput(filename):
             data_parse[key] = info
 
     ######## Example of data_parse output ########
-    # 'LacI_sensor_model': 
-    #     [{'name': 'ymax', 'value': 2.8, 'description': 'Maximal transcription'}, 
-    #     {'name': 'ymin', 'value': 0.0034, 'description': 'Minimal transcription'}, 
-    #     {'name': 'alpha', 'value': 0.73, 'description': 'Tandem parameter'}, 
+    # 'LacI_sensor_model':
+    #     [{'name': 'ymax', 'value': 2.8, 'description': 'Maximal transcription'},
+    #     {'name': 'ymin', 'value': 0.0034, 'description': 'Minimal transcription'},
+    #     {'name': 'alpha', 'value': 0.73, 'description': 'Tandem parameter'},
     #     {'name': 'beta', 'value': 0.04, 'description': 'Tandem parameter'}]
     return data_parse
+
+
 ######################################################################
 
 
 '''readXMLparts function. Used to parse the XML parts file for the part_name and dna sequence
 input: full path to xml file'''
+
+
 def readXMLparts(filename):
     file1 = open('xml_parts.xml', 'r')
     Lines = file1.readlines()
 
     parts = {}
-    
+
     # Strips the newline character
     count = 0
     partName = None
@@ -49,7 +56,7 @@ def readXMLparts(filename):
             while str1[c2] != "<":
                 c2 += 1
 
-            partName = str1[c1+1:c2]
+            partName = str1[c1 + 1:c2]
 
         elif "<field name=\"sequence\">" in line.strip():
             if partName != None:
@@ -59,7 +66,7 @@ def readXMLparts(filename):
                 while str1[c2] != "<":
                     c2 += 1
 
-                parts[partName] = str1[c1+1:c2]
+                parts[partName] = str1[c1 + 1:c2]
                 partName = None
 
     return parts
@@ -67,37 +74,38 @@ def readXMLparts(filename):
 
 ''' Function used to find the GC content
 input: string-> DNA sequence '''
+
+
 def GC_function(DNA_sequence):
-	length = len(DNA_sequence)
-	A_count = 0
-	G_count = 0
-	T_count = 0
-	C_count = 0
-	#print(length)
-	for i in range(length):
-		if DNA_sequence[i] == "A":
-			A_count = A_count + 1
+    length = len(DNA_sequence)
+    A_count = 0
+    G_count = 0
+    T_count = 0
+    C_count = 0
+    # print(length)
+    for i in range(length):
+        if DNA_sequence[i] == "A":
+            A_count = A_count + 1
 
-		elif DNA_sequence[i] == "G":
-			G_count = G_count + 1
+        elif DNA_sequence[i] == "G":
+            G_count = G_count + 1
 
-		elif DNA_sequence[i] == "T":
-			T_count = T_count + 1 
+        elif DNA_sequence[i] == "T":
+            T_count = T_count + 1
 
-		elif DNA_sequence[i] == "C":
-			C_count = C_count + 1
+        elif DNA_sequence[i] == "C":
+            C_count = C_count + 1
 
+    print("Number of A's: {}".format(A_count))
+    print("Number of G's: {}".format(G_count))
+    print("Number of T's: {}".format(T_count))
+    print("Number of C's: {}".format(C_count))
+    print("The total number of bases is: {}.".format(length))
 
-	print("Number of A's: {}" .format(A_count))
-	print("Number of G's: {}" .format(G_count))
-	print("Number of T's: {}" .format(T_count))
-	print("Number of C's: {}" .format(C_count))
-	print("The total number of bases is: {}." .format(length))
+    GC_content = ((G_count + C_count) / length) * 100
+    print("The GC content is {}".format(GC_content))
 
-	GC_content = ((G_count+C_count)/length)*100
-	print("The GC content is {}" .format(GC_content))
-
-	return GC_content
+    return GC_content
 
 
 # function to write modified input json file with noise
@@ -108,11 +116,11 @@ def output_json(prev_file, params, in_dir, new_file_name):
     # new_file_name: name of the new file to be created
 
     full_prev_file = os.path.join(in_dir, prev_file)
-    data = None # Load entire prev_file
+    data = None  # Load entire prev_file
     with open(full_prev_file) as f:
         data = json.load(f)
 
-    # Add new parametes to data 
+    # Add new parametes to data
     for i in range(len(data)):
         if data[i]['collection'] == 'models':
             data[i]['parameters'] = params[data[i]['name']]
@@ -124,3 +132,8 @@ def output_json(prev_file, params, in_dir, new_file_name):
     f.write(new_file)
     f.close()
 
+
+# function to create truncated random distribution
+def get_truncated_normal(mean=0, sd=1, low=0, upp=10):
+    return truncnorm(
+        (low - mean) / sd, (upp - mean) / sd, loc=mean, scale=sd)

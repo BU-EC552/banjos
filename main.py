@@ -1,12 +1,10 @@
-import numpy as np
+# imports:
 from celloapi2 import CelloResult, CelloQuery
 import sys
-import os
-
-from matplotlib.pyplot import plot
-
+import matplotlib.pyplot as plt
 from helper import *
 from itertools import combinations
+from inspect import signature
 
 # Ask user for input files:
 # 1) verilog file that describes genetic circuit
@@ -34,8 +32,10 @@ v_file = 'and.v'
 options = 'options.csv'
 input_sensor_file = f'{chassis_name}.input.json'
 output_device_file = f'{chassis_name}.output.json'
-# READ FROM VERILOG FILE NUMBER OF INPUT SIGNALS NEEDED
+
+# READ FROM VERILOG FILE the NUMBER OF INPUT SIGNALS NEEDED
 signal_input = 2
+# initialize to zero
 best_score = 0
 best_input_signals = None
 
@@ -102,13 +102,13 @@ for i in range(signal_input):
             for n in range(4):
                 # select "perturbations" from normal distribution - each "noise" has its own distribution
                 # (multiply) the parameters from input signals to simulate noise
-                num = np.random.normal(loc=0.5, scale=1.0, size=None)
-                input_parameters[best_input_signals[i] + '_sensor_model'][n]['value'] = input_parameters[best_input_signals[i] + '_sensor_model'][n]['value'] * num
+                num = get_truncated_normal(mean=0.5, sd=1, low=0, upp=1)
+                input_parameters[best_input_signals[i] + '_sensor_model'][n]['value'] = input_parameters[best_input_signals[i] + '_sensor_model'][n]['value'] * (num.rvs(1))[0]
                 # write modified value to new json file to submit to cello
                 new_file = 'noise.input.json'
                 # currently not properly exporting json (missing info that is not included in parseInput
                 output_json(input_sensor_file, input_parameters, in_dir, new_file)
-                print(f'Evaluating parameter" {n}')
+                print(f'Evaluating parameter: {n}')
                 # submit to cello to measure "robustness" - how score changes
                 m = CelloQuery(
                     input_directory=in_dir,
@@ -127,11 +127,17 @@ for i in range(signal_input):
                 rob_scores.append(res.circuit_score)
 
 # analysis of scores --> order: (ymax, ymin, alpha, beta) --> for each signal
-delta_scores = rob_scores - best_score
+delta_scores = []
+for i in range(len(rob_scores)):
+    delta_scores.append(rob_scores[i] - best_score)
 # plot sensitiviy analysis
-plot(delta_scores)
+plt.plot(delta_scores)
+plt.ylabel("Delta Values: How scores changed with noise")
+plt.xlabel("Parameters")
+plt.title("Input Signals - Sensitivity Analysis")
+plt.show()
 # do more analysis
-
+print(delta_scores)
 # evaluate circuit with different metrics:
 # 1) CelloResult score?
 # 2) Cello toxicity?
@@ -145,4 +151,3 @@ plot(delta_scores)
 # sensitivity plots
 
 # overall circuit score and robustness
-
