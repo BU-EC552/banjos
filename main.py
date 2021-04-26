@@ -186,7 +186,7 @@ plt.show()
 pos_delta = [abs(ele) for ele in delta_scores]
 labels = []
 for i in range(len(delta_scores)):
-    if delta_scores[i] > std:
+    if pos_delta[i] > std:
         labels.append('yes')
     else:
         labels.append("No")
@@ -248,7 +248,7 @@ total_gc = gc_cost1 + gc_cost2/2
 # make chart with all costs and overall score with user inputted weights
 obj_func = 0
 # ignore toxicity fo now
-obj_func = (weight1 * avg_score)  - (weight3 * cost) - (weight4 * total_gc)
+obj_func = (weight1 * avg_score) - (weight3 * cost) - (weight4 * total_gc)
 df = pd.DataFrame({'Score': avg_score, 'Toxicity': res_toxic, 'Parts Cost': cost, 'Assembly Cost': total_gc, 'Overall Performance': obj_func})
 print(df)
 
