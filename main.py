@@ -1,21 +1,40 @@
 # imports:
+import statistics
+from cmath import sqrt
+
 from celloapi2 import CelloResult, CelloQuery
 import sys
 import matplotlib.pyplot as plt
 from helper import *
 from itertools import combinations
-from inspect import signature
+import pandas as pd
 
 # Ask user for input files:
 # 1) verilog file that describes genetic circuit
-# 2) UCF file that describes target vector
-# 3) file that describes input signals
-# 4) file that describes output signal
+# 2) UCF file that describes target vector (default = Eco1C1G1T1)
+# 3) file that describes input signals (default = Eco1C1G1T1)
+# 4) file that describes output signal (default = Eco1C1G1T1)
 
 '''For now, this tool is a command-line feature. Users will enter important
 files using command line. User will enter path to directory of input files'''
 # Example of command input:
 # python3 main.py input
+
+print("Hello User, B.A.N.G.O.S will evaluate your circuit based on its performance using Cello, "
+      "circuit toxicity, and an estimate of part manufacturing cost as well as an assembly cost")
+print("Please provide us with what metrics are most important to you, if all are the same please "
+      "put 1, else write 1 to 4 next to each metric")
+w1 = input("Cello Performance: ")
+w2 = input("Circuit Toxicity: ")
+w3 = input("Part Manufacturing Cost: ")
+w4 = input("Assembly cost: ")
+
+# normalize weight (so they sum to unity)
+total_sum = int(w1) + int(w3) + int(w4)
+weight1 = int(w1)/total_sum
+# weight2 = int(w2)/total_sum
+weight3 = int(w3)/total_sum
+weight4 = int(w4)/total_sum
 
 # Getting directory of input files
 directory = sys.argv[1]
@@ -25,16 +44,21 @@ directory = sys.argv[1]
 in_dir = os.path.join(os.getcwd(), 'input')
 out_dir = os.path.join(os.getcwd(), 'output')
 
+print("Thank You for providing your preferences")
+print("Now tell us the name of the chassis were you want to build your circuit and your circuit ")
 # Set our input files.
-chassis_name = 'Eco1C1G1T1'
+# ask user for the chassis the circuit is going to be constructed
+chassis_name = input("Chassis name: ")
 in_ucf = f'{chassis_name}.UCF.json'
-v_file = 'and.v'
+# ask user for verilog file describing circuit
+v_file = input("Circuit to test: ")
 options = 'options.csv'
 input_sensor_file = f'{chassis_name}.input.json'
 output_device_file = f'{chassis_name}.output.json'
 
-# READ FROM VERILOG FILE the NUMBER OF INPUT SIGNALS NEEDED
-signal_input = 2
+# ask user how many input signals circuit needs
+signal_input = input("Number of input signals needed: ")
+signal_input = int(signal_input)
 # initialize to zero
 best_score = 0
 best_input_signals = None
@@ -68,27 +92,26 @@ print(f'Score: {best_score}')
 print(f'Best input signals: {best_input_signals}')
 
 # dealing with cello's stochastic score: create average of score with best input signals
-# score = 0
-# for i in range(5): # 5 for now... probably need more runs or justify why 5?
-  #  q.set_input_signals(best_input_signals)
-  #  q.get_results()
-   # res = CelloResult(results_dir=out_dir)
-   # score = score + res.circuit_score
-    # print(res.circuit_score)
+# evaluate circuit with different metrics:
+# 1) CelloResult score
+scores = []
+for i in range(5): # 5 for now... probably need more runs or justify why 5?
+  q.set_input_signals(best_input_signals)
+  q.get_results()
+  res = CelloResult(results_dir=out_dir)
+  scores.append(res.circuit_score)
+  # print(f'Score is: {res.circuit_score}')
 
-# avg_score = score/5
-# print(avg_score)
-
-#################### NEXT STEP #########################
-# send design space to stochastic simulation algorithm
-
-# obtain simulation data
-
-# perform optimization to obtain consistent circuit response (eg minimize variance)
-# extract parameters to optimize from UCF file
-# ucf_parameters = parseInput(in_dir + '/' + in_ucf)
-# num_parameters = len(ucf_parameters)
-
+# average score:
+avg_score = 0
+scores.append(best_score)
+for i in range(len(scores)):
+    avg_score = avg_score + scores[i]
+avg_score = avg_score/6
+print(f"Average score with best input signals: {avg_score}")
+# standard deviation:
+std = statistics.pstdev(scores)
+print(f'Standard deviation: {std}')
 
 # parameter perturbation will be performed to assess "robustness" of circuit (eg sensitivity analysis)
 rob_scores = []
@@ -129,47 +152,73 @@ for i in range(signal_input):
                 rob_scores.append(res.circuit_score)
                 # reset value
                 input_parameters[best_input_signals[i] + '_sensor_model'][n]['value'] =  noiseless_param[best_input_signals[i] + '_sensor_model'][n]['value']
+
 # analysis of scores --> order: (ymax, ymin, alpha, beta) --> for each signal
 delta_scores = []
 for i in range(len(rob_scores)):
-    delta_scores.append(rob_scores[i] - best_score)
-# figure 1 = plot delta
+    delta_scores.append(rob_scores[i] - avg_score)
+# print(delta_scores)
+# figure 1 = plot delta for each parameter perturbation score
+plt.subplot(1,2,1)
 plt.plot(delta_scores)
 plt.ylabel("Delta Values: How scores changed with noise")
 plt.xlabel("Parameters")
 plt.title("Input Signals - Sensitivity Analysis")
-plt.show()
 # figure 2 plot scores vs original scores and add "error" bars
 original_score = []
+best_scores = []
+pos_stds = []
+neg_stds = []
 for i in range(len(rob_scores)):
-    original_score.append(best_score)
-plt.plot(original_score, 'g', rob_scores, 'r')
+    original_score.append(avg_score)
+    best_scores.append(best_score)
+    pos_stds.append(avg_score+std)
+    neg_stds.append(avg_score-std)
+plt.subplot(1,2,2)
+plt.plot(best_scores, 'b', original_score, 'g', rob_scores, 'r', pos_stds, 'y', neg_stds, 'y')
 plt.xlabel("Parameters")
 plt.ylabel("Scores")
+plt.legend(["Best Score", "Average Score", "Parameter Perturbation Scores", "Standard Dev", "Standard Dev"])
 plt.show()
 
-
+# display more info - eg whether is lies in standard deviation of scores for each input signal:
+# make all delta values positive:
+pos_delta = [abs(ele) for ele in delta_scores]
+labels = []
+for i in range(len(delta_scores)):
+    if delta_scores[i] > std:
+        labels.append('yes')
+    else:
+        labels.append("No")
+name_params = []
+for i in range(signal_input):
+    name_params.extend(['ymax', 'ymin', 'alpha', 'beta'])
+df1 = pd.DataFrame(list(zip(name_params, labels)),
+               columns =['Parameter Perturbation', 'Outside of standard deviation?'])
+print(df1)
 
 # evaluate circuit with different metrics:
-# 1) CelloResult score?
-
-
 # 2) Cello toxicity. Toxicity result after CelloResult
 res_toxic = findToxicity()
 
-# access Part Registry
+
 # 3) part manufacturing cost
 # Simulate cost. If part exists, cost += 0, else cost += 1
 # Reads the xml_parts.xml to get all known parts.
 knownParts = readXMLparts('xml_parts.xml')
-fileInputJson = 'input/Eco1C1G1T1.input.json'
+fileInputJson = f'input/{chassis_name}.input.json'
 userParts = getPartsFromInputJson(fileInputJson)
-
-
-# set default values for comparison : eg normal gc content in order to make comparison
-# 4) assembly cost
 cost = 0
 for part in userParts:
+
+    if part not in knownParts.keys():
+       # Increment cost
+       cost += 1
+       print("Part does not exists...")
+fileUCFJson = f'input/{chassis_name}.UCF.json'
+userParts2 = getPartsFromInputJson(fileUCFJson)
+for part in userParts2:
+
     if part not in knownParts.keys():
        # Increment cost
        cost += 1
@@ -177,21 +226,29 @@ for part in userParts:
 
 print('Total cost for this design: ', cost)
 
-
-# sensitivity plots
-# ?????????????????
-
-
-
-
-
-
-
-
-
-
-
-
-
+# set default values for comparison : eg normal gc content in order to make comparison
+# 4) assembly cost:
+# call cg content function if > 60 % --> high cost
+# get DNA sequences
+sequences1 = userParts.values()
+sequences2 = userParts2.values()
+gc_cost1 = 0
+gc_cost2 = 0
+for seq in sequences1:
+    temp = GC_function(seq)
+    gc_cost1 += temp
+gc_cost1 = gc_cost1/len(sequences1)
+for seq in sequences2:
+    temp = GC_function(seq)
+    gc_cost2 += temp
+gc_cost2 = gc_cost2/len(sequences2)
+total_gc = gc_cost1 + gc_cost2/2
 
 # overall circuit score and robustness
+# make chart with all costs and overall score with user inputted weights
+obj_func = 0
+# ignore toxicity fo now
+obj_func = (weight1 * avg_score)  - (weight3 * cost) - (weight4 * total_gc)
+df = pd.DataFrame({'Score': avg_score, 'Toxicity': res_toxic, 'Parts Cost': cost, 'Assembly Cost': total_gc, 'Overall Performance': obj_func})
+print(df)
+
