@@ -148,16 +148,50 @@ plt.xlabel("Parameters")
 plt.ylabel("Scores")
 plt.show()
 
+
+
 # evaluate circuit with different metrics:
 # 1) CelloResult score?
-# 2) Cello toxicity?
 
-# access part registry
+
+# 2) Cello toxicity. Toxicity result after CelloResult
+res_toxic = findToxicity()
+
+# access Part Registry
 # 3) part manufacturing cost
+# Simulate cost. If part exists, cost += 0, else cost += 1
+# Reads the xml_parts.xml to get all known parts.
+knownParts = readXMLparts('xml_parts.xml')
+fileInputJson = 'input/Eco1C1G1T1.input.json'
+userParts = getPartsFromInputJson(fileInputJson)
+
 
 # set default values for comparison : eg normal gc content in order to make comparison
 # 4) assembly cost
+cost = 0
+for part in userParts:
+    if part not in knownParts.keys():
+       # Increment cost
+       cost += 1
+       print("Part does not exists...")
+
+print('Total cost for this design: ', cost)
+
 
 # sensitivity plots
+# ?????????????????
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # overall circuit score and robustness

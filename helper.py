@@ -93,12 +93,14 @@ input: string-> DNA sequence '''
 
 
 def GC_function(DNA_sequence):
+    # Make DNA sequence upper case to satisify lowercase dna sequence inputs
+    DNA_sequence = DNA_sequence.upper()
     length = len(DNA_sequence)
     A_count = 0
     G_count = 0
     T_count = 0
     C_count = 0
-    # print(length)
+
     for i in range(length):
         if DNA_sequence[i] == "A":
             A_count = A_count + 1
@@ -112,17 +114,38 @@ def GC_function(DNA_sequence):
         elif DNA_sequence[i] == "C":
             C_count = C_count + 1
 
-    print("Number of A's: {}".format(A_count))
-    print("Number of G's: {}".format(G_count))
-    print("Number of T's: {}".format(T_count))
-    print("Number of C's: {}".format(C_count))
-    print("The total number of bases is: {}.".format(length))
+    # Comment out for now. Will use for further analysis
+    # print("Number of A's: {}".format(A_count))
+    # print("Number of G's: {}".format(G_count))
+    # print("Number of T's: {}".format(T_count))
+    # print("Number of C's: {}".format(C_count))
+    # print("The total number of bases is: {}.".format(length))
 
-    GC_content = ((G_count + C_count) / length) * 100
-    print("The GC content is {}".format(GC_content))
+    # Getting GC content percentage between 0-1
+    GC_content = ((G_count + C_count) / length)
+    
+    # GC_content = ((G_count + C_count) / length) * 100
+    # print("The GC content is {}".format(GC_content))
 
     return GC_content
 
+def findToxicity():
+    out_dir = 'output'
+    files = os.listdir(out_dir)
+
+    # Getting toxicity files
+    files_toxicity = [i for i in files if 'toxicity' in i]
+    print(files_toxicity[0])
+
+    results = {}
+    # Getting toxicity of files 
+    if len(files_toxicity) > 0:
+        with open(out_dir + '/' + files_toxicity[0]) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            for row in csv_reader:
+                results[str(row[0])] = row[1:]
+
+    return results
 
 # function to write modified input json file with noise
 def output_json(prev_file, params, in_dir, new_file_name):
