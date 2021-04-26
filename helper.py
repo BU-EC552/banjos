@@ -3,10 +3,26 @@ import csv
 import os
 from scipy.stats import truncnorm
 
+def getPartsFromInputJson(filename):
+    data = None
+    with open(filename) as f:
+        data = json.load(f)
+
+    data_parse = {}
+    for idx in range(len(data)):
+        # Getting parts from input.json
+        if data[idx]['collection'] == 'parts':
+            info = data[idx]['dnasequence']
+    
+            key = str(data[idx]['name'])
+            data_parse[key] = info
+
+    # Output parse is example:
+    # {'pTet': 'AAATTTT}
+    return data_parse
+
 ''' Function used to parse the input.json from celloapi2
     input: full path of input.json file'''
-
-
 def parseInput(filename):
     data = None
     with open(filename) as f:
