@@ -160,6 +160,21 @@ for i in range(len(rob_scores)):
 # print(delta_scores)
 # figure 1 = plot delta for each parameter perturbation score
 plt.subplot(1,2,1)
+
+#####Used to get x labels ################
+x = [i for i in range(len(delta_scores))]
+parameters = ['ymax', 'ymin', 'alpha', 'beta']
+xVals = []
+for sig in best_input_signals:
+    mod_param_labels = []
+    for param in parameters:
+        mod_param_labels.append(param + '('+sig+')')
+
+    xVals.extend(mod_param_labels)
+my_xticks = xVals
+x = [i for i in range(len(my_xticks))]
+plt.xticks(x, my_xticks, rotation=20)
+###########################################
 plt.plot(delta_scores)
 plt.ylabel("Delta Values: How scores changed with noise")
 plt.xlabel("Parameters")
@@ -175,6 +190,7 @@ for i in range(len(rob_scores)):
     pos_stds.append(avg_score+std)
     neg_stds.append(avg_score-std)
 plt.subplot(1,2,2)
+plt.xticks(x, my_xticks, rotation=20)
 plt.plot(best_scores, 'b', original_score, 'g', rob_scores, 'r', pos_stds, 'y', neg_stds, 'y')
 plt.xlabel("Parameters")
 plt.ylabel("Scores")
@@ -201,7 +217,6 @@ print(df1)
 # 2) Cello toxicity. Toxicity result after CelloResult
 res_toxic = findToxicity()
 
-
 # 3) part manufacturing cost
 # Simulate cost. If part exists, cost += 0, else cost += 1
 # Reads the xml_parts.xml to get all known parts.
@@ -210,7 +225,6 @@ fileInputJson = f'input/{chassis_name}.input.json'
 userParts = getPartsFromInputJson(fileInputJson)
 cost = 0
 for part in userParts:
-
     if part not in knownParts.keys():
        # Increment cost
        cost += 1
@@ -218,7 +232,6 @@ for part in userParts:
 fileUCFJson = f'input/{chassis_name}.UCF.json'
 userParts2 = getPartsFromInputJson(fileUCFJson)
 for part in userParts2:
-
     if part not in knownParts.keys():
        # Increment cost
        cost += 1
