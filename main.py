@@ -221,6 +221,7 @@ res_toxic = findToxicity()
 # Simulate cost. If part exists, cost += 0, else cost += 1
 # Reads the xml_parts.xml to get all known parts.
 knownParts = readXMLparts('xml_parts.xml')
+# input file
 fileInputJson = f'input/{chassis_name}.input.json'
 userParts = getPartsFromInputJson(fileInputJson)
 cost = 0
@@ -229,9 +230,18 @@ for part in userParts:
        # Increment cost
        cost += 1
        print("Part does not exists...")
+# ucf file
 fileUCFJson = f'input/{chassis_name}.UCF.json'
 userParts2 = getPartsFromInputJson(fileUCFJson)
 for part in userParts2:
+    if part not in knownParts.keys():
+       # Increment cost
+       cost += 1
+       print("Part does not exists...")
+# output file
+fileOutputJson = f'input/{chassis_name}.output.json'
+userParts3 = getPartsFromInputJson(fileOutputJson)
+for part in userParts3:
     if part not in knownParts.keys():
        # Increment cost
        cost += 1
@@ -245,8 +255,10 @@ print('Total cost for this design: ', cost)
 # get DNA sequences
 sequences1 = userParts.values()
 sequences2 = userParts2.values()
+sequences3 = userParts3.values()
 gc_cost1 = 0
 gc_cost2 = 0
+gc_cost3 = 0
 for seq in sequences1:
     temp = GC_function(seq)
     gc_cost1 += temp
@@ -255,13 +267,25 @@ for seq in sequences2:
     temp = GC_function(seq)
     gc_cost2 += temp
 gc_cost2 = gc_cost2/len(sequences2)
-total_gc = gc_cost1 + gc_cost2/2
+for seq in sequences3:
+    temp = GC_function(seq)
+    gc_cost3 += temp
+gc_cost3 = gc_cost3/len(sequences3)
+total_gc = gc_cost1 + gc_cost2 + gc_cost3/3
+
 
 # overall circuit score and robustness
 # make chart with all costs and overall score with user inputted weights
 obj_func = 0
 # ignore toxicity fo now
-obj_func = (weight1 * avg_score) - (weight3 * cost) - (weight4 * total_gc)
+# normalize each metric
+# 1) cello score --> use highest ever cello score as maximum score
+norm_score = avg_score/best_score
+# 2) cost --> divide cost by total number of parts
+total_parts = len(userParts) + len(userParts2) + len(userParts3)
+norm_cost = cost/total_parts
+# 3) total gc content --> already between 0 and 1
+
+obj_func = (weight1 * norm_score) - (weight3 * norm_cost) - (weight4 * total_gc)
 df = pd.DataFrame({'Score': avg_score, 'Toxicity': res_toxic, 'Parts Cost': cost, 'Assembly Cost': total_gc, 'Overall Performance': obj_func})
 print(df)
-
