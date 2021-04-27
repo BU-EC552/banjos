@@ -14,7 +14,7 @@ Please make sure that you can run the cello api on your machine. To install cell
 
 Aside from the cello api requirenments, no further dependencies are necessary. 
 
-For the cost metric, BANGOS uses the iGEM's Registry of Standard Biological Parts at: http://parts.igem.org/Registry_API. Please scroll down to the XML download and add the file to the path of the input directory.
+For the cost metric, BANGOS uses the iGEM's Registry of Standard Biological Parts at: http://parts.igem.org/Registry_API. Please scroll down to the XML download and add the file to the path of the input directory on your local machine. 
 
 To install BANGOS, clone this repository. 
 
