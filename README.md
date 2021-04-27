@@ -7,7 +7,7 @@ BANGOS is a command line tool that interacts with the CELLO API. It takes a circ
 - cost (based on biological parts registries) 
 -  circuit toxicity. 
 
-The BANGO score lies in a range from 0 to 1, where a circuit that obtains a score closer to 1 represents a robust circuit in the presence of noise, an easier circuit to build and lastly an inexpensive circuit where its parts already exist in the registry. 
+The BANGO score lies in a range from 0 to 1, where a circuit that obtains a score closer to 1 represents a robust circuit in the presence of noise, an easier circuit to build and lastly an inexpensive circuit. 
 
 ### Installation 
 Please make sure that you can run the cello api on your machine. To install cello, please follow the instructions described in: https://github.com/CIDARLAB/celloapi2
