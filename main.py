@@ -271,7 +271,8 @@ for seq in sequences3:
     temp = GC_function(seq)
     gc_cost3 += temp
 gc_cost3 = gc_cost3/len(sequences3)
-total_gc = gc_cost1 + gc_cost2 + gc_cost3/3
+total_gc = 0
+total_gc = (gc_cost1 + gc_cost2 + gc_cost3)/3
 
 
 # overall circuit score and robustness
