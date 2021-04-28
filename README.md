@@ -12,7 +12,8 @@ The BANGO score lies in a range from 0 to 1, where a circuit that obtains a scor
 ### Installation 
 Please make sure that you can run the cello api on your machine. To install cello, please follow the instructions described in: https://github.com/CIDARLAB/celloapi2
 
-Aside from the cello api requirenments, no further dependencies are necessary. 
+Next, to install the remaining dependencies, please run 
+`pip install -r requirements.txt`
 
 For the cost metric, BANGOS uses the iGEM's Registry of Standard Biological Parts at: http://parts.igem.org/Registry_API. Please scroll down to the XML download and add the file to the path of the input directory on your local machine. 
 
