@@ -17,9 +17,9 @@ Please move to the CODE directory. The CODE folder is available in Final_Project
 Next, to install the remaining dependencies, please run 
 `pip3 install -r requirements.txt`
 
-For the cost metric, BANGOS uses the iGEM's Registry of Standard Biological Parts at: http://parts.igem.org/Registry_API. Please scroll down to the XML download and add the file to the path of the input directory on your local machine. 
+For the cost metric, BANGOS uses the iGEM's Registry of Standard Biological Parts at: http://parts.igem.org/Registry_API, however this file was modified for the purpose of the software developement.
 
-Download modified xml file to your directory here. https://drive.google.com/file/d/1DIQIdmrU2aYTFxdpX7-2oLN5a5YmRYYl/view?usp=sharing
+Download modified XML file to your directory here. https://drive.google.com/file/d/1DIQIdmrU2aYTFxdpX7-2oLN5a5YmRYYl/view?usp=sharing
 Please make sure to move this file to the CODE directory
 
 To install BANGOS, clone this repository. 
