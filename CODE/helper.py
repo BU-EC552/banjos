@@ -4,6 +4,7 @@ import os
 from scipy.stats import truncnorm
 
 def getPartsFromInputJson(filename):
+    # File used to parse input json
     data = None
     with open(filename) as f:
         data = json.load(f)
@@ -53,8 +54,6 @@ def parseInput(filename):
 
 '''readXMLparts function. Used to parse the XML parts file for the part_name and dna sequence
 input: full path to xml file'''
-
-
 def readXMLparts(filename):
     file1 = open('xml_parts.xml', 'r')
     Lines = file1.readlines()
@@ -90,8 +89,6 @@ def readXMLparts(filename):
 
 ''' Function used to find the GC content
 input: string-> DNA sequence '''
-
-
 def GC_function(DNA_sequence):
     # Make DNA sequence upper case to satisify lowercase dna sequence inputs
     DNA_sequence = DNA_sequence.upper()
@@ -130,6 +127,7 @@ def GC_function(DNA_sequence):
     return GC_content
 
 def findToxicity():
+    # Function used to find toxicity 
     out_dir = 'output'
     files = os.listdir(out_dir)
 
