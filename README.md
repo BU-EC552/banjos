@@ -29,7 +29,7 @@ To install BANGOS, clone this repository.
 
 `python3 main.py input`
 
-You will be asked to specify your preference for the weighting scheme: which metrics matter most to you, as well as the name of your circuit (for example: and.v) and the number of input signals your circuit needs. 
+You will be asked to specify your preference for the weighting scheme: which metrics matter most to you, as well as the name of the device(for example: Eco1C1G1T1), your circuit (for example: and.v) and the number of input signals your circuit needs. 
 
 Please make sure that your input folder contains AND is within the CODE directory:
 - INPUT JSON file
