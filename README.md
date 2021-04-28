@@ -12,8 +12,7 @@ The BANGO score lies in a range from 0 to 1, where a circuit that obtains a scor
 ### Installation 
 Please make sure that you can run the cello api on your machine. To install cello, please follow the instructions described in: https://github.com/CIDARLAB/celloapi2
 
-Move to the CODE directory
-`cd CODE`
+Please move to the CODE directory. The CODE folder is available in Final_Project_BANGOS
 
 Next, to install the remaining dependencies, please run 
 `pip3 install -r requirements.txt`
