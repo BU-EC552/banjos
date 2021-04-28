@@ -38,4 +38,6 @@ Please make sure that your input folder contains AND is within the CODE director
 - verilog file that describes your circuit 
 
 
+** In the CODE directory, you will see an example of the structure of the input folder needed.
+
 
