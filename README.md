@@ -30,7 +30,7 @@ To install BANGOS, clone this repository.
 
 You will be asked to specify your preference for the weighting scheme: which metrics matter most to you, as well as the name of your circuit (for example: and.v) and the number of input signals your circuit needs. 
 
-Please make sure that your input folder contains:
+Please make sure that your input folder contains AND is within the CODE directory:
 - INPUT JSON file
 - UCF JSON file
 - OUTPUT JSON file
